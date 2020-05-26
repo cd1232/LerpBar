@@ -2,6 +2,7 @@
 #include "LerpBarWidget.h"
 
 // Engine Includes
+#include "Components/ProgressBar.h"
 
 // Local Includes
 
@@ -19,7 +20,7 @@ void ULerpBarWidget::SetPercentDirectly(const float Percent) const
 void ULerpBarWidget::LerpTo(float Percent)
 {
 	// Don't let percent go less than 0
-	PercentToLerpTo = FMath::Max(0.0f, Percent);
+	PercentToLerpTo = FMath::Min(FMath::Max(0.0f, Percent), 1.0f);
 	
 	const bool bIsGaining = Percent > MainBar->Percent;
 	const bool bWasLerping = bIsLerping;
@@ -42,7 +43,6 @@ void ULerpBarWidget::LerpTo(float Percent)
 	else
 	{
 		GhostBar->SetFillColorAndOpacity(OriginalGhostBarColor);
-		GhostBar->SetPercent(MainBar->Percent);		
 		MainBar->SetPercent(Percent);		
 	}
 }
@@ -67,5 +67,10 @@ void ULerpBarWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	
 		const float NewPercent = FMath::FInterpConstantTo(BarToLerp->Percent, PercentToLerpTo, InDeltaTime, CalculatedSpeed);
 		BarToLerp->SetPercent(NewPercent);
+
+		if (NewPercent == PercentToLerpTo)
+		{
+			bIsLerping = false;
+		}
 	}
 }

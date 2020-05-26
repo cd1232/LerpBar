@@ -2,8 +2,6 @@
 
 // Engine Includes
 #include "Blueprint/UserWidget.h"
-#include "Components/ProgressBar.h"
-#include "Styling/SlateTypes.h"
 
 // Local Includes
 
@@ -11,6 +9,7 @@
 #include "LerpBarWidget.generated.h"
 
 // Forward Includes
+class UProgressBar;
 
 UCLASS(Blueprintable)
 class LERPBAR_API ULerpBarWidget : public UUserWidget
@@ -50,10 +49,6 @@ private:
 
 	UPROPERTY()
 	FLinearColor OriginalGhostBarColor;
-	
-	/** Used if we don't lerp over set time. This is how much percent per second */
-    UPROPERTY(EditAnywhere, meta = (EditCondition = "!bWillLerpOverSetTime"))
-    float SpeedPerSecond = 0.0f;
 
 	/** How long it will take to lerp from start value to new value passed through LerpTo */
 	UPROPERTY(EditAnywhere)
